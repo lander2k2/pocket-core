@@ -4,6 +4,15 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
+	"io"
+	"io/ioutil"
+	log2 "log"
+	"os"
+	fp "path/filepath"
+	"strings"
+	"syscall"
+	"time"
+
 	kitlevel "github.com/go-kit/kit/log/level"
 	"github.com/go-kit/kit/log/term"
 	"github.com/pokt-network/pocket-core/baseapp"
@@ -37,14 +46,6 @@ import (
 	"github.com/tendermint/tendermint/rpc/client/local"
 	dbm "github.com/tendermint/tm-db"
 	"golang.org/x/crypto/ssh/terminal"
-	"io"
-	"io/ioutil"
-	log2 "log"
-	"os"
-	fp "path/filepath"
-	"strings"
-	"syscall"
-	"time"
 )
 
 var (
@@ -499,7 +500,7 @@ func NewHostedChains(generate bool) *types.HostedBlockchains {
 		return generateChainsJson(chainsPath)
 	}
 	// reopen the file to read into the variable
-	jsonFile, err := os.OpenFile(chainsPath, os.O_RDWR|os.O_CREATE, os.ModePerm)
+	jsonFile, err := os.OpenFile(chainsPath, os.O_RDONLY|os.O_CREATE, os.ModePerm)
 	if err != nil {
 		log2.Fatal(NewInvalidChainsError(err))
 	}
