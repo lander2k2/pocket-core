@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
+
 	kitlevel "github.com/go-kit/kit/log/level"
 	"github.com/go-kit/kit/log/term"
 	"github.com/pokt-network/pocket-core/baseapp"
@@ -125,7 +126,7 @@ func InitConfig(datadir, tmNode, persistentPeers, seeds, remoteCLIURL string) {
 	defer jsonFile.Close()
 	// if file exists open, else create and open
 	if _, err := os.Stat(configFilepath); err == nil {
-		jsonFile, err = os.OpenFile(configFilepath, os.O_RDWR, os.ModePerm)
+		jsonFile, err = os.OpenFile(configFilepath, os.O_RDONLY, os.ModePerm)
 		if err != nil {
 			log2.Fatalf("cannot open config json file: " + err.Error())
 		}
@@ -514,7 +515,7 @@ func HotReloadChains(chains *types.HostedBlockchains) {
 				return
 			}
 			// reopen the file to read into the variable
-			jsonFile, err := os.OpenFile(chainsPath, os.O_RDWR|os.O_CREATE, os.ModePerm)
+			jsonFile, err := os.OpenFile(chainsPath, os.O_RDONLY|os.O_CREATE, os.ModePerm)
 			if err != nil {
 				log2.Fatal(NewInvalidChainsError(err))
 			}
